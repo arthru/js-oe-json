@@ -2,16 +2,12 @@
 
 function do_fetch(oe) {
 
-    "use strict";
-
-    oe.connection.rpc('/web/dataset/search_read', {
-        'model': 'res.partner',
-        'fields': ['name', 'city']
-    }).then(function (data) {
+    var partner = new oe.web.Model('res.partner');
+    partner.query(['name', 'city']).all().then(function (data) {
         var str = "<ul>";
         var o;
-        for (o in data.records) {
-            str += "<li>" + data.records[o].name + " - " + data.records[o].city + "</li>";
+        for (o in data) {
+            str += "<li>" + data[o].name + " - " + data[o].city + "</li>";
         }
         str += "</ul>";
         $('#fetch').html(str);
@@ -19,5 +15,4 @@ function do_fetch(oe) {
         $('#fetch').html("<b>" + error.message + "</b>" + "\n\n<pre>" + error.data.debug + "</pre>");
         $('#fetch').addClass("Error");
     });
-
 }
